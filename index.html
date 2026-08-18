@@ -180,5 +180,51 @@ body{padding-bottom:82px}
   try{localStorage.setItem('aiptimise_lead',v);}catch(_){}
   window.location.href='./report.html';});})();
 </script>
+
+<style>
+.modal-ovl{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(7,17,30,.62);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}
+.modal-ovl.show{display:flex}
+.modal-card{position:relative;width:100%;max-width:470px;background:var(--surface);border:1px solid var(--rule);border-radius:24px;padding:40px 36px 30px;box-shadow:0 40px 100px rgba(0,0,0,.45);font-family:system-ui,-apple-system,sans-serif}
+.modal-card h3{font-size:29px;line-height:1.15;margin:.4em 0 .45em;font-weight:800;letter-spacing:-.02em}
+.modal-card .mp{font-size:16.5px;line-height:1.55;color:var(--muted);margin:0 0 22px}
+.modal-form{display:flex;flex-direction:column;gap:11px}
+.modal-form input{font-size:16px;padding:14px;border:1.5px solid var(--rule);border-radius:12px;background:var(--paper);color:var(--ink)}
+.modal-form input:focus{outline:none;border-color:var(--accent)}
+.modal-form button{font-weight:750;font-size:17px;color:#fff;background:var(--accent);border:0;border-radius:12px;padding:15px;cursor:pointer}
+.modal-form button:hover{filter:brightness(1.05)}
+.modal-x{position:absolute;top:14px;right:18px;background:none;border:0;font-size:28px;line-height:1;color:var(--muted);cursor:pointer}
+.modal-later{display:block;margin:16px auto 0;background:none;border:0;color:var(--muted);font-size:13.5px;cursor:pointer;text-decoration:underline}
+</style>
+<div id="modal" class="modal-ovl" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true">
+    <button class="modal-x" id="modalX" aria-label="Close">&times;</button>
+    <div class="eyebrow">The full report</div>
+    <h3>Read the rest, free.</h3>
+    <p class="mp">Every number on this page, the sources behind them, and what the brands already getting recommended by AI do differently. Drop your email and it is yours.</p>
+    <form id="lead3" class="modal-form" novalidate>
+      <input id="email3" type="email" placeholder="you@yourbrand.com" required autocomplete="email">
+      <button type="submit">Send me the full report &rarr;</button>
+    </form>
+    <button class="modal-later" id="modalLater">Maybe later</button>
+  </div>
+</div>
+<script>
+(function(){
+ var m=document.getElementById('modal'),shown=false;
+ function open(){if(shown)return;try{if(sessionStorage.getItem('aiptimise_modal'))return;}catch(_){}
+   shown=true;m.classList.add('show');try{sessionStorage.setItem('aiptimise_modal','1');}catch(_){}
+   setTimeout(function(){var el=document.getElementById('email3');if(el)el.focus();},60);}
+ function close(){m.classList.remove('show');}
+ window.addEventListener('scroll',function(){if(window.scrollY>500)open();},{passive:true});
+ document.getElementById('modalX').onclick=close;
+ document.getElementById('modalLater').onclick=close;
+ m.addEventListener('click',function(e){if(e.target===m)close();});
+ document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+ var f=document.getElementById('lead3');
+ f.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('email3').value.trim();
+   if(!v||v.indexOf('@')<1){document.getElementById('email3').focus();return;}
+   try{localStorage.setItem('aiptimise_lead',v);}catch(_){}window.location.href='./report.html';});
+})();
+</script>
 </body>
 </html>
