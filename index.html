@@ -170,8 +170,11 @@ footer a{color:var(--accent); text-decoration:none}
       d.append('entry.1508815946', email);
       d.append('entry.1749445933', source||'');
       d.append('entry.1373513815', (location.pathname||'').split('/').pop()||'index');
-      fetch('https://docs.google.com/forms/d/e/1FAIpQLSd1rLQH4DFfHj8qbp7ZKyWajAGFyC6cNvVaBHu8_B4lyj-Fkw/formResponse',
-        {method:'POST',mode:'no-cors',body:d});
+      var url='https://docs.google.com/forms/d/e/1FAIpQLSd1rLQH4DFfHj8qbp7ZKyWajAGFyC6cNvVaBHu8_B4lyj-Fkw/formResponse';
+      // sendBeacon survives the page navigation to report.html (fixes the race that dropped submits).
+      var sent=false;
+      try{ if(navigator.sendBeacon){ sent=navigator.sendBeacon(url,d); } }catch(_){}
+      if(!sent){ fetch(url,{method:'POST',mode:'no-cors',body:d,keepalive:true}); }
     }catch(_){}
   };
   var f=document.getElementById('lead');
