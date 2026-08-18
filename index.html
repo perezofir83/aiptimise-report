@@ -143,13 +143,24 @@ footer a{color:var(--accent); text-decoration:none}
 </footer>
 
 <script>
+  /* Lead capture -> Google Form -> synced to Google Sheet. Fire-and-forget, no-cors. */
+  window.aiptimiseCapture=function(email,source){
+    try{ localStorage.setItem('aiptimise_lead', email); }catch(_){}
+    try{
+      var d=new FormData();
+      d.append('entry.1508815946', email);
+      d.append('entry.1749445933', source||'');
+      d.append('entry.1373513815', (location.pathname||'').split('/').pop()||'index');
+      fetch('https://docs.google.com/forms/d/e/1FAIpQLSd1rLQH4DFfHj8qbp7ZKyWajAGFyC6cNvVaBHu8_B4lyj-Fkw/formResponse',
+        {method:'POST',mode:'no-cors',body:d});
+    }catch(_){}
+  };
   var f=document.getElementById('lead');
   f.addEventListener('submit',function(e){
     e.preventDefault();
     var email=document.getElementById('email').value.trim();
     if(!email || email.indexOf('@')<1){document.getElementById('email').focus();return;}
-    /* TODO: wire capture endpoint here (Formspree / Apps Script / ESP). */
-    try{ localStorage.setItem('aiptimise_lead', email); }catch(_){}
+    window.aiptimiseCapture(email,'hero');
     window.location.href='./report.html';
   });
 </script>
@@ -178,7 +189,7 @@ body{padding-bottom:82px}
  f.addEventListener('submit',function(e){e.preventDefault();
   var v=document.getElementById('email2').value.trim();
   if(!v||v.indexOf('@')<1){document.getElementById('email2').focus();return;}
-  try{localStorage.setItem('aiptimise_lead',v);}catch(_){}
+  window.aiptimiseCapture(v,'sticky-bar');
   window.location.href='./report.html';});})();
 </script>
 
@@ -224,7 +235,7 @@ body{padding-bottom:82px}
  var f=document.getElementById('lead3');
  f.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('email3').value.trim();
    if(!v||v.indexOf('@')<1){document.getElementById('email3').focus();return;}
-   try{localStorage.setItem('aiptimise_lead',v);}catch(_){}window.location.href='./report.html';});
+   window.aiptimiseCapture(v,'popup');window.location.href='./report.html';});
 })();
 </script>
 </body>
